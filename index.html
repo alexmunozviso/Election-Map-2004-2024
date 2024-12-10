@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Digital Mockup Map</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Halant:ital,wght@0,400;0,800;1,800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito Sans:ital,wght@0,400;0,800;1,800&display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            background: grey;
+            font-family: "Halant";
+            font-weight: 400;
+            font-size: 100%;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 3rem;
+            color: rgb(77, 77, 77);
+        }
+
+        h1 {
+            font-weight: 800;
+            color: rgb(77, 77, 77);
+            font-family: "Halant";
+        }
+
+        p {
+            line-height: 1.7rem;
+            font-family: "Nunito Sans";
+        }
+
+        .slidecontainer {
+            width: 100%;
+            /* Width of the outside container */
+        }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;
+            /* Override default CSS styles */
+            appearance: none;
+            width: 100%;
+            /* Full-width */
+            height: 25px;
+            /* Specified height */
+            background: #d3d3d3;
+            /* Grey background */
+            outline: none;
+            /* Remove outline */
+            opacity: 0.7;
+            /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s;
+            /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
+
+        /* Mouse-over effects */
+        .slider:hover {
+            opacity: 1;
+            /* Fully shown on mouse-over */
+        }
+
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            /* Override default look */
+            appearance: none;
+            width: 25px;
+            /* Set a specific slider handle width */
+            height: 25px;
+            /* Slider handle height */
+            background: #04AA6D;
+            /* Green background */
+            cursor: pointer;
+            /* Cursor on hover */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            /* Set a specific slider handle width */
+            height: 25px;
+            /* Slider handle height */
+            background: #04AA6D;
+            /* Green background */
+            cursor: pointer;
+            /* Cursor on hover */
+        }
+
+        #map {
+            /* height is set in JS */
+            background: #2d2f31;
+        }
+
+        .legend {
+            font-size: 1rem;
+            border-radius: 5px;
+            max-width: 200px;
+            font-family: "Halant";
+            background: rgba(100, 100, 100, 0.9);
+            color: rgba(244, 244, 244, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legend h3 {
+            font-size: 1.1em;
+            font-weight: normal;
+            font-family: "Halant";
+            color: #ddd;
+            margin: 0 0 10px 0;
+        }
+
+        .legend span {
+            width: 20px;
+            height: 20px;
+            margin: 0 10px 4px 0;
+        }
+
+        .legend label {
+            font-size: 0.9rem;
+            font-family: "Nunito Sans", sans-serif;
+        }
+
+        .leaflet-bar a {
+            /* Override the default style for Leaflet's zoom  */
+            background: light;
+            color: grey;
+        }
+
+        a:hover {
+            color: rgb(130, 131, 132);
+            text-decoration: none;
+        }
+
+        .leaflet-container {
+            font-family: "Halant", sans-serif;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: rgb(62, 62, 62);
+            color: rgb(244, 244, 244);
+            border: none;
+            padding: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .leaflet-popup-content p,
+        .leaflet-popup-content a {
+            line-height: 1.6rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .leaflet-popup-content h3 {
+            font-size: 1.8rem;
+            font-weight: 400;
+        }
+
+        /* Custom Tool tips */
+        .leaflet-tooltip-own {
+            background: rgba(58, 58, 58, 0.955);
+            color: rgb(244, 244, 244);
+            border: none;
+            font-size: 1rem;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: "Nunito Sans", sans-serif;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .leaflet-tooltip-left:before {
+            right: 0;
+            margin-right: -12px;
+            border-left-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .leaflet-tooltip-right:before {
+            left: 0;
+            margin-left: -12px;
+            border-right-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Small devices (landscape phones, 576px and up) */
+        @media (min-width: 576px) {}
+
+        /* Medium devices (tablets, 768px and up) */
+        @media (min-width: 768px) {}
+
+        /* Large devices (desktops, 992px and up) */
+        @media (min-width: 992px) {}
+
+        /* Extra large devices (large desktops, 1200px and up) */
+        @media (min-width: 1200px) {}
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <header class="row bg-light text-grey p-2">
+            <div class="col-8">
+                <h1>US Presidential Elections 2004-2024</h1>
+            </div>
+            <div class="col-4 align-self-center">
+                <p class="d-flex justify-content-end my-auto">
+                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+                        aria-controls="offcanvasExample">
+                        Map Info and data
+                    </a>
+                </p>
+            </div>
+        </header>
+
+        <!-- ui is outside of container-fluid and will be dynamically added to map -->
+        <div class="slidecontainer">
+            <input type="range" min="2004" max="2024" value="2004" class="slider" id="myRange">
+        </div>
+
+        <section class="row">
+            <div class="p-0">
+                <div id="map"></div>
+            </div>
+        </section>
+
+        <footer class="row bg-light text-grey p-2">
+            <p class="text-center"></p>
+        </footer>
+    </div>
+
+    <div class="offcanvas offcanvas-start bg-light text-grey" tabindex="-1" id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Map Info and data</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h3 class="py-2">About this map</h3>
+            <p>
+                Lorem ipsum odor amet, consectetuer adipiscing elit. Massa platea gravida nisi scelerisque dapibus
+                ultrices duis. Sem
+                finibus leo lobortis efficitur risus massa lobortis luctus. Commodo quam mollis faucibus, habitant leo
+                vulputate auctor.
+            </p>
+            <p>Malesuada auctor fusce ultrices commodo sodales adipiscing ad interdum pretium. Natoque phasellus
+                interdum iaculis
+                hendrerit volutpat euismod, feugiat turpis.</p>
+
+            <h3 class="py-2">Data</h3>
+            <p>
+                Maximus habitasse posuere nam, feugiat penatibus ac. Non eleifend
+                eu donec orci aenean eleifend mattis.
+            </p>
+            <p>
+                Mi ridiculus convallis facilisis varius posuere praesent.
+            </p>
+            <p>
+                Montes facilisis habitant morbi consequat suspendisse maecenas nisi. Parturient est erat sapien; dolor
+                litora ex.
+            </p>
+            <hr />
+            <ul class="list-unstyled">
+                <li>
+                    authored by
+                    <a href="https://github.com/alexmunozviso">Àlex Muñoz Viso</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- legend is outside of container-fluid and will be dynamically added to map -->
+    <div class="legend d-flex flex-column px-3 py-2" id="legend"></div>
+
+
+    <!-- end ui-controls -->
+
+    <!-- Add Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!-- then Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- then Simple Statistics -->
+    <script src="https://unpkg.com/simple-statistics@7.8.3/dist/simple-statistics.min.js"></script>
+    <script>
+        // Add footer date
+        setDate();
+
+        // set global variables for header, map container, and footer
+        const header = document.querySelector("header");
+        const mapContainer = document.querySelector("#map");
+        const footer = document.querySelector("footer");
+
+        // set map height to fill window
+        mapContainer.style.height =
+            window.innerHeight - header.offsetHeight - footer.offsetHeight + "px";
+
+        // initial Leaflet map options
+        const options = {
+            zoomSnap: 0.1,
+            center: [40, -100],
+            zoom: 4,
+            zoomControl: false,
+        };
+        // create Leaflet map and apply options
+        const map = L.map("map", options);
+        new L.control.zoom({ position: "bottomright" }).addTo(map);
+        // request a basemap tile layer and add to the map
+        L.tileLayer(
+            'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20,
+        }
+        ).addTo(map);
+
+        // footer with the current year updated
+        function setDate() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = date.toLocaleString("default", { month: "long" });
+            const footerText = document.querySelector("footer p");
+            footerText.innerHTML = `${year} | Àlex Muñoz Viso`;
+        }
+
+
+        fetch("./digital_mockup/data/us_50m_states_election2004_2024.geojson")
+            .then(function (result) { return result.json() })
+            .then(function (data) {
+                const dataLayer = L.geoJson(data, {
+                    style: function (feature) {
+
+                        let props = feature.properties
+                        let winner = props["y2004"]
+
+                        if (winner === "Republican") {
+                            return {
+                                fillColor: "#E81B23",
+                                color: "Black",
+                                weight: 2.5,
+                                fillOpacity: 1,
+
+                            };
+                        } else {
+                            return {
+                                fillColor: "#00AEF3",
+                                color: "Black",
+                                weight: 2.5,
+                                fillOpacity: 1,
+
+                            };
+                        }
+                    },
+                }).addTo(map)
+
+                drawMap(dataLayer)
+            })
+
+
+        function drawMap(leafletObj) {
+            //y2004
+            console.log(leafletObj)
+        }
+
+    </script>
+</body>
+
+</html>
