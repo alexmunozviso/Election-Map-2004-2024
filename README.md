@@ -1,118 +1,56 @@
-# Lesson 06: Project proposal
+# US Presidential Elections 2004-2024
 
-## Overview
+## Introduction
+For my final project, I will map US presidential election results from 2004 to 2024 at the state level. The map will be fixated in the contiguous US but the user will be able to pan and zoom around to search for specific state results including Alaska, Hawaii, or the District of Columbia.
 
-This module begins the period of working exclusively on your final project. You will create a proposal for your final project which includes a project title, a description of the project, a list of features that the final project will include, and – most importantly – examples of usable data. This also starts the "alpha" version of a project, which identifies the desired features, perhaps inspired by previous mock-up designs, that you plan to implement. This is realized in your first digital mockup.
+## 1. Data
+Data for this project comes from two main sources:
+* MIT Election Data and Science Lab, 2017, "U.S. President 1976–2020", https://doi.org/10.7910/DVN/42MVDX, Harvard Dataverse, V8; 1976-2020-president.tab [fileName], UNF:6:a2yzwWNbv+Eff8aqVmkZKA== [fileUNF] 
 
-## Table of Contents
-<!-- TOC -->
+* Data 2024: Dave Leip's Atlas of U.S Presidential Elections (https://uselectionatlas.org/RESULTS/national.php)
 
-- [Lesson 06: Project proposal](#lesson-06-project-proposal)
-    - [Overview](#overview)
-    - [Table of Contents](#table-of-contents)
-    - [Part I: Discussion on Canvas (2.5 pt)](#part-i-discussion-on-canvas-25-pt)
-    - [Part II: Project proposal (10 pts @ 2.5 pts each)](#part-ii-project-proposal-10-pts--25-pts-each)
-        - [1. Data source](#1-data-source)
-        - [2. Topic and geographic phenomena your map will explore](#2-topic-and-geographic-phenomena-your-map-will-explore)
-        - [3. Map objectives and user needs](#3-map-objectives-and-user-needs)
-        - [4. Anticipating your technology stack](#4-anticipating-your-technology-stack)
-        - [5. First digital version of your mockup](#5-first-digital-version-of-your-mockup)
-        - [Project README.md](#project-readmemd)
-    - [Deliverable](#deliverable)
+Electoral data from 2004 to 2020 was collected from the MIT Election Data and Science Lab. This data was enriched with 2024 election data from Dave Leip's Atlas of U.S Presidential Elections. Data on the Electoral college seats won by each parte in each election for the 2004-2024 period were also collected from [Dave Leip's Atlas of U.S Presidential Elections](https://uselectionatlas.org/).
 
-<!-- /TOC -->
+The data was aggregated and edited using Visual Studio Code to obtain a CSV that can be retrieved [here](https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/data/us_election2004_2024.csv).
 
-## Part I: Discussion on Canvas (2.5 pt)
+The US polygon data was be downloaded from  [Natural Earth Data](https://www.naturalearthdata.com/). Then, using QGIS, it was converted to a GEOJSON and enriched with the election data through a table join. The final GEPJSON can be retrieved [here](https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/data/us_50m_states_election2004_2024.geojson).  
 
-Find the discussion forum called *What inspires you?* in our module on Canvas. Share a statement about what motivates you and guides your design choices. This is an open-ended response but try to identify your sources for inspiration. Finally, share a little bit about your final project idea.
+_Note: The data included in this project relates only to the two majority parties (i.e., Demcoratic and Republican parties), as third party vote in the US is statistically insignificant and results in no actual institutional representation, which is the focus of this map. Additionally, adding the data on all third parties reduced the map's readability and played against the overall simplicity of its design._
 
-## Part II: Project proposal (10 pts @ 2.5 pts each)
+## 2. Map style and representation
+Electoral data is represented coloring each state polygon with the color of the election winner for that given year. Party colors for the <span style="color:#00AEF3;font-weight:700">Democratic (HEX #00AEF3)</span> and the <span style="color:#E81B23;font-weight:700">Republican (HEX #E81B23)</span> parties were extracted from [flagcolorcodes](https://www.flagcolorcodes.com/). 
 
-It's time to start thinking carefully about your final map project. The deliverable for this section will include five responsibilities:
+As per the overall layout style, I designed a simple and sober greyscale design, aiming at providing a 'presidential' look. In line with this, [Halant](https://fonts.google.com/?query=halant) is the font used for titles and [Nunito Sans](https://fonts.google.com/specimen/Nunito+Sans) for all other texts.
 
-1. Your data source and (at least a sample of) the data required to meet the map's objectives.
-2. The map topic and geographic phenomena your map will explore.
-3. An articulation of the map's objectives and user needs.
-4. A summary of the predicted technology stack.
-5. The first digital version of your mockup.
+## 3. Interactive Capabilities and UI
+The map includes different interactive elements with a simple design to highlight user accessibility and familiarity. Most interactive elements, such as the slider to navigate through years of data, have a familiar design that the user can recognize, thus facilitating user experience and the map's functionality.
 
+Regarding particular elements and the visuals of the UI, the map contains:
+1. The map and data occupying the whole screen.
+2. A title box in the top/left corner of the screen.
+3. An information button to the right of the title. If clicked, a pop/up text appears including a map description and information on the data sources (including links).
+4. A year slider at the top/left corner of the screen. When users interact with the slider, the map updates showing the election results for the selected year.
+5. A legend showing election results for that particular year with the party color's, the candidate's name and last name, and the number of electoral seats won (thus showing the election winner).
+6. Hovering affordances. When the user hovers over a given state, the state boundary is highlighted by changing colors. Automatically, a tooltip appears providing the following information:
+   * State name.
+   * Electoral college seats for each party in the given state.
+   * Popular vote for each party in the given state.
 
-### 1. Data source
+## 4. Map objectives
+The purpose of the map is to offer an summary of election data that is accessible, simple to comprehend, and easy to visualize. When looking for election results, it is not easy to find a single place where all data is accessible in the simplest of ways, especially in the way it will be presented in this digital map.
 
-This one is crucial. Sometimes we have high goals and ideas for a map. But if we can't easily and quickly get the data in a fast-paced class like this, we don't leave much time for the design and development phases. Demonstrate access to your data, or very minimally some ugly data that we can consider strategies for refining and cleaning up (though we recommend you begin the data wrangling immediately).
+Moreover, mapping election results is a contested topic among cartographers, as it is hard to have the right balance between how elections are won (e.g., Electoral College seats ) and what people vote for (i.e., popular vote). I think the data represented at the state level plus a tooltip with detailed information will help bridge this gap. Additionally, the slider option will allow the user to navigate data for different years in situ, icnreasing data accessibility.
 
-**Provide:** 
-1. Your anticipated data source and 
-2. a small sample of the data (e.g., CSV/GeoJSON/Shapefile or a URL link to an accessible database). 
-We need to be able to look at the data to give you quality feedback concerning your overall map objectives and what we can achieve in the next few weeks.
+## 5. Technology stack
+The data sources and description, as well as the processing tools used for this project, are explained in detail in the second section of this page.
 
-Still shopping for a topic? Sometimes just taking a stroll through data sources and visualizations can spark a great idea. Here are a few sources to get you started:
+In the construction of the digital map, I used Leaflet JS library to set all the map features and UI capabilities. Additionally, I used Google Fonts through their CSS API too call the necessary font families, thus enriching the map's style. 
 
-* https://www.data.gov/
-* https://kygeonet.ky.gov/
-* https://usa.ipums.org/usa/
-* https://hub.arcgis.com/pages/open-data
-* https://graphics.reuters.com/
-* https://www.nytimes.com/section/upshot
-* https://pudding.cool/
-* https://www.reddit.com/r/MapPorn/
-* https://flowingdata.com/
-* https://www.davidrumsey.com/
+## 6. Project updates
+I doubted between using a slider or a drop/down button to navigate between the election maps and data. To solve this, I made two versions of the map as static mockups (one with a slider and one with a button) and showed them to three friends, treating them as 'testing users'. The three of them said to prefer the slider version. Overall, they said it was easier to identify as an interactive element and that it was better at visualizing change in 'swing' states. Interestingly, one of them mentioned that the slider added a certain "playfulness" to the map's interaction that they enjoyed.
 
-If you find a data source that you'd like to share, please do so in this module's discussion forum.
-
-Don't have data after shopping around for a bit? Reach out for help ASAP! Check the modules' addenda for the different APIs for getting data. Most importantly, think about data and a map that you'll have fun making and that you'll be eager to share with those who are important to you.
-
-### 2. Topic and geographic phenomena your map will explore
-
-What are you mapping? Briefly describe the topic and the geography the map intends to represent. Also, provide a tentative title (and possibly a subtitle) for your project. Remember that good titles, while being provocative and potentially fun, can quickly summarize the mapping project.
-
-**Provide:**
-
-1. *What?*
-2. *Where?*
-3. *When?*
-4. What is the tentative title of your project?
-
-Then, think about how this will be realized in the browser:
-
-5. Identify your anticipated methods of thematic representation methods (e.g., icons, choropleth, prop symbols, etc.).
-6. Briefly describe your anticipated user interface (UI).
+The two static mockup versions of the map showed to the testers can be retrieved [here](https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/graphics/mockup-button.jpg) and [here](https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/graphics/mockup-slider.jpg).
 
 
-### 3. Map objectives and user needs
 
-Answer these questions:
-
-* Why does the map need to be made? Consider your position to the mapping project. Why are you the one to be designing it?
-* What type of user do you expect to use this map and what needs do you anticipate they will have? 
-
-### 4. Anticipating your technology stack
-
-Your description of the technology stack should include:
-
-* A description of the data and information processing tools used, e.g., QGIS, [MapShaper](http://www.mapshaper.org/), ArcGIS Pro, etc.
-* The format you'll use to store your data, e.g., flat files such as CSV, GeoJSON, or dynamically from an API.
-* The JS libraries you anticipate using or need like Leaflet, omnivore, Papa Parse, etc.
-
-### 5. First digital version of your mockup
-
-Create an *index.html* file to include a mockup of your map. This draft may not be contain the desired functionality. That's okay – and expected. Using your previous mockups as a guide, create the first digital realization of your map.
-
-You can draw from existing class projects and templates to help develop this mockup. This web page should include the following:
-
-1. A map with a basemap focused on your area of interest.
-2. Use of the colors, icons, and other thematic elements you anticipate using and identified in previous responses.
-3. A title and subtitle.
-4. Placeholder for text and UI elements.
-5. Code comments where you anticipate adding functionality.
-6. Ideally, some visual representation of the data you are using.
-
-### Project README.md
-
-Consider these responses as a draft of the information you'll want to include in your final project repo's *README.md*. While informative to curious users of your map, the proposal also looks good to employers and clients in terms of demonstrating your expertise in the world of open source web mapping!
-
-## Deliverable
-
-Submit the URL to this repository to Canvas Submissions.
 
