@@ -19,14 +19,33 @@
 
     <style>
         body {
-            background: grey;
+            background: #f8f9fa;
             font-family: "Halant";
             font-weight: 400;
             font-size: 100%;
         }
 
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 3rem;
+        }
+
         h1 {
             font-weight: 800;
+            color: rgb(77, 77, 77);
+            font-family: "Halant";
+        }
+
+        h2 {
+            font-weight: 700;
+            color: rgb(77, 77, 77);
+            font-family: "Halant";
+        }
+
+        h3 {
+            font-weight: 500;
             color: rgb(77, 77, 77);
             font-family: "Halant";
         }
@@ -81,38 +100,29 @@
         }
 
         .legend {
+            width: 400px;
+            height: 90px;
             font-size: 1rem;
-            border-radius: 5px;
-            max-width: 200px;
+            border-radius: 8px;
+            max-width: 250px;
             font-family: "Halant";
-            background: rgba(100, 100, 100, 0.9);
-            color: rgba(244, 244, 244, 0.8);
+            padding: 1rem;
+            text-align: left;
+            background: #f8f9fa;
+            color: rgba(54, 54, 54, 0.8);
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
-        .legend h3 {
-            font-size: 1.1em;
+        .legend h2 {
+            font-size: 1.5em;
             font-weight: normal;
-            font-family: "Halant";
-            color: #ddd;
-            margin: 0 0 10px 0;
+            color: #00AEF3;
         }
 
-        .legend span {
-            width: 20px;
-            height: 20px;
-            margin: 0 10px 4px 0;
-        }
-
-        .legend label {
-            font-size: 0.9rem;
-            font-family: "Nunito Sans", sans-serif;
-        }
-
-        .leaflet-bar a {
-            /* Override the default style for Leaflet's zoom  */
-            background: light;
-            color: grey;
+        .legend h3 {
+            font-size: 1.5em;
+            font-weight: normal;
+            color: #E81B23;
         }
 
         a:hover {
@@ -205,6 +215,8 @@
             <h3><span id="demo"></span></h3>
         </div>
 
+
+
         <section class="row">
             <div class="p-0">
                 <div id="map"></div>
@@ -225,26 +237,23 @@
         <div class="offcanvas-body">
             <h3 class="py-2">About this map</h3>
             <p>
-                Lorem ipsum odor amet, consectetuer adipiscing elit. Massa platea gravida nisi scelerisque dapibus
-                ultrices duis. Sem
-                finibus leo lobortis efficitur risus massa lobortis luctus. Commodo quam mollis faucibus, habitant leo
-                vulputate auctor.
+                This interactive map shows US Presidential Election results from 2004 to 2024 by state. Detailed election results data
+                is provided for each state when hovering over it.
             </p>
-            <p>Malesuada auctor fusce ultrices commodo sodales adipiscing ad interdum pretium. Natoque phasellus
-                interdum iaculis
-                hendrerit volutpat euismod, feugiat turpis.</p>
+            <p>Use the slider on the top-left side of the map to inspect the results for each election year.</p>
 
             <h3 class="py-2">Data</h3>
             <p>
-                Maximus habitasse posuere nam, feugiat penatibus ac. Non eleifend
-                eu donec orci aenean eleifend mattis.
+                Election data from 2004 to 2020 was collected from the 
+                <a href="https://doi.org/10.7910/DVN/42MVDX">MIT Election Data and Science Lab</a>.
             </p>
             <p>
-                Mi ridiculus convallis facilisis varius posuere praesent.
+                Election data for 2024 and the Electoral College seats results were collected from the
+                 <a href="https://uselectionatlas.org">Dave Leip's Atlas of U.S Presidential Elections</a>.
             </p>
             <p>
-                Montes facilisis habitant morbi consequat suspendisse maecenas nisi. Parturient est erat sapien; dolor
-                litora ex.
+                The final data compilation by the author can be found 
+                    <a href="https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/data/us_election2004_2024.csv">here</a>.
             </p>
             <hr />
             <ul class="list-unstyled">
@@ -280,6 +289,7 @@
         slider.oninput = function () {
             output.innerHTML = this.value;
         }
+
         // set global variables for header, map container, and footer
         const header = document.querySelector("header");
         const mapContainer = document.querySelector("#map");
@@ -298,6 +308,8 @@
         };
         // create Leaflet map and apply options
         const map = L.map("map", options);
+
+
         new L.control.zoom({ position: "bottomright" }).addTo(map);
         // request a basemap tile layer and add to the map
         L.tileLayer(
@@ -315,8 +327,6 @@
                     style: function (feature) {
 
                         let props = feature.properties
-
-                        console.log(props)
                         let winner = props["y2004"]
 
                         if (winner === "Republican") {
@@ -334,7 +344,7 @@
                                 weight: 1.5,
                                 fillOpacity: 1,
 
-                            };
+                            }; 
                         }
                     },
                     onEachFeature: function (feature, layer) {
@@ -353,21 +363,80 @@
                         })
                         layer.bindTooltip(`
                     <h3>${props["NAME"]}</h3>
-                    Democratic Popular Vote: ${demPopularVote} <br>
-                    Republican Popular Vote: ${repPopularVote} <br>
-                    Democratic Electoral Seats: ${demElectoralVote} <br>
-                    Republican Electoral Seats: ${repPlectoralVote}`)
+                    Democratic Popular Vote: ${demPopularVote.toLocaleString()} <br>
+                    Republican Popular Vote: ${repPopularVote.toLocaleString()} <br>
+                    Democratic Electoral Seats: ${demElectoralVote.toLocaleString()} <br>
+                    Republican Electoral Seats: ${repPlectoralVote.toLocaleString()}`)
                     }
 
 
 
                 }).addTo(map)
 
+
+
+
+                //draw the first legend when initiating the map
+                drawLegend("2004")
                 updateMap(dataLayer)
             })
 
+        // declare the function to remove the legend before updating it
+        function removeLegend() {
+            const legendDiv = document.querySelectorAll('.legend')
+            legendDiv.forEach(function (div) {
+                div.remove()
+            })
+        }
+
+        function drawLegend(year) {
+            const electionWinnerJson = {
+                2004: {
+                    "demCandidate": "John Kerry 251",
+                    "RepCandidate": "George W. Bush 286"
+                }, 2008: {
+                    "demCandidate": "Barack Obama 365",
+                    "RepCandidate": "John McCain 173"
+                }, 2012: {
+                    "demCandidate": "Barack Obama 332",
+                    "RepCandidate": "Mitt Romney 206"
+                }, 2016: {
+                    "demCandidate": "Hillary Clinton 227",
+                    "RepCandidate": "Donald Trump 304"
+                }, 2020: {
+                    "demCandidate": "Joe Biden 306",
+                    "RepCandidate": "Donald Trump 232"
+                }, 2024: {
+                    "demCandidate": "Kamala Harris 226",
+                    "RepCandidate": "Donald Trump 312"
+
+                },
+            }
+
+            // call the function to get rid of the prior legend before drawing the next one after using the slider
+            removeLegend()
+
+            let legend = L.control({ position: "topright" })
+            let data = electionWinnerJson[year]
+
+            let dem = data["demCandidate"]
+            let rep = data["RepCandidate"]
+
+            legend.onAdd = function () {
+                const div = L.DomUtil.create("div", "legend")
+                div.innerHTML = `<h2>${dem}</i></h2> 
+                            <h3>${rep}</h3>`
+                return div
+            }
+
+
+            legend.addTo(map)
+
+
+        }
+
         function updateMap(leafletObj) {
-            
+
             const sliderValue = document.getElementById("sliderId")
             sliderValue.addEventListener("input", function (e) {
                 let sliderValue = e.srcElement.value
@@ -392,10 +461,10 @@
 
                     layer.bindTooltip(`  
                  <h3>${props["NAME"]}</h3>                  
-                    Democratic Popular Vote: ${demPopularVote} <br>
-                    Republican Popular Vote: ${repPopularVote} <br>
-                    Democratic Electoral Seats: ${demElectoralVote} <br>
-                    Republican Electoral Seats: ${repPlectoralVote}`)
+                    Democratic Popular Vote: ${demPopularVote.toLocaleString()} <br>
+                    Republican Popular Vote: ${repPopularVote.toLocaleString()} <br>
+                    Democratic Electoral Seats: ${demElectoralVote.toLocaleString()} <br>
+                    Republican Electoral Seats: ${repPlectoralVote.toLocaleString()}`)
 
                     if (winner === "Republican") {
                         layer.setStyle({
@@ -413,6 +482,8 @@
                         })
                     }
                 })
+
+                drawLegend(sliderValue)
             })
 
         }

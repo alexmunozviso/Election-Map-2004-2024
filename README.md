@@ -1,7 +1,7 @@
 # US Presidential Elections 2004-2024
 
 ## Introduction
-For my final project, I will map US presidential election results from 2004 to 2024 at the state level. The map will be fixated in the contiguous US but the user will be able to pan and zoom around to search for specific state results including Alaska, Hawaii, or the District of Columbia.
+This mapping project is aimed at representing US presidential election results from 2004 to 2024 at the state level in a simple and unified way. The map initates with the contiguous US but the user can pan and zoom around the map to search for specific state results including Alaska, Hawaii, or the District of Columbia.
 
 ## 1. Data
 Data for this project comes from two main sources:
@@ -33,8 +33,8 @@ Regarding particular elements and the visuals of the UI, the map contains:
 5. A legend showing election results for that particular year with the party color's, the candidate's name and last name, and the number of electoral seats won (thus showing the election winner).
 6. Hovering affordances. When the user hovers over a given state, the state boundary is highlighted by changing colors. Automatically, a tooltip appears providing the following information:
    * State name.
-   * Electoral college seats for each party in the given state.
-   * Popular vote for each party in the given state.
+   * Electoral college seats won by each party in the given state.
+   * Popular vote values for each party in the given state.
 
 ## 4. Map objectives
 The purpose of the map is to offer an summary of election data that is accessible, simple to comprehend, and easy to visualize. When looking for election results, it is not easy to find a single place where all data is accessible in the simplest of ways, especially in the way it will be presented in this digital map.
