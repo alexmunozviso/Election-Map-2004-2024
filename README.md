@@ -1,5 +1,7 @@
 # US Presidential Elections 2004-2024
 
+The final result of this mapping project is _'Four More Years'_, an interactive digital map available [here](https://alexmunozviso.github.io/Election-Map-2004-2024/).
+
 ## Introduction
 This mapping project is aimed at representing US presidential election results from 2004 to 2024 at the state level in a simple and unified way. The map initates with the contiguous US but the user can pan and zoom around the map to search for specific state results including Alaska, Hawaii, or the District of Columbia.
 

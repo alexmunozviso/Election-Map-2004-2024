@@ -33,19 +33,24 @@
         }
 
         h1 {
-            font-weight: 800;
-            color: rgb(77, 77, 77);
-            font-family: "Halant";
+            font-weight: 900;
+            color: rgb(61, 61, 61);
+            font-family: "Nunito Sans";
+            font-variant: small-caps;
+            font-size: 50px;
+            letter-spacing: 2px;
+            word-spacing: 2px;
         }
 
         h2 {
-            font-weight: 700;
+            font-weight: 500;
             color: rgb(77, 77, 77);
             font-family: "Halant";
+            font-style: italic;
         }
 
         h3 {
-            font-weight: 500;
+            font-weight: 400;
             color: rgb(77, 77, 77);
             font-family: "Halant";
         }
@@ -97,6 +102,7 @@
         #map {
             /* height is set in JS */
             background: #2d2f31;
+            height: 100%;
         }
 
         .legend {
@@ -196,7 +202,8 @@
     <div class="container-fluid">
         <header class="row bg-light text-grey p-2">
             <div class="col-8">
-                <h1>US Presidential Elections 2004-2024</h1>
+                <h1>Four More Years</h1>
+                <h2>US Presidential Elections 2004-2024</h2>
             </div>
             <div class="col-4 align-self-center">
                 <p class="d-flex justify-content-end my-auto">
@@ -237,29 +244,37 @@
         <div class="offcanvas-body">
             <h3 class="py-2">About this map</h3>
             <p>
-                This interactive map shows US Presidential Election results from 2004 to 2024 by state. Detailed election results data
+                This interactive map shows US Presidential Election results from 2004 to 2024 by state. Detailed
+                election results data
                 is provided for each state when hovering over it.
             </p>
             <p>Use the slider on the top-left side of the map to inspect the results for each election year.</p>
 
             <h3 class="py-2">Data</h3>
             <p>
-                Election data from 2004 to 2020 was collected from the 
+                Election data from 2004 to 2020 was collected from the
                 <a href="https://doi.org/10.7910/DVN/42MVDX">MIT Election Data and Science Lab</a>.
             </p>
             <p>
                 Election data for 2024 and the Electoral College seats results were collected from the
-                 <a href="https://uselectionatlas.org">Dave Leip's Atlas of U.S Presidential Elections</a>.
+                <a href="https://uselectionatlas.org">Dave Leip's Atlas of U.S Presidential Elections</a>.
             </p>
             <p>
-                The final data compilation by the author can be found 
-                    <a href="https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/data/us_election2004_2024.csv">here</a>.
+                The final data compilation by the author can be accessed
+                <a
+                    href="https://github.com/alexmunozviso/Election-Map-2004-2024/blob/main/data/us_election2004_2024.csv">here</a>.
             </p>
             <hr />
             <ul class="list-unstyled">
                 <li>
                     authored by
                     <a href="https://github.com/alexmunozviso">Àlex Muñoz Viso</a>
+                    in fulfilment of the requirements for the final project of the <a
+                        href="https://github.com/newmapsplus">New Maps Plus</a> graduate certificate in digital mapping.
+                </li>
+               
+                <li>More information about this project can be found <a
+                        href="https://github.com/alexmunozviso/Election-Map-2004-2024">here</a>.
                 </li>
             </ul>
         </div>
@@ -302,7 +317,7 @@
         // initial Leaflet map options
         const options = {
             zoomSnap: 0.1,
-            center: [40, -100],
+            center: [40.00, -100.00],
             zoom: 4,
             zoomControl: false,
         };
@@ -344,7 +359,7 @@
                                 weight: 1.5,
                                 fillOpacity: 1,
 
-                            }; 
+                            };
                         }
                     },
                     onEachFeature: function (feature, layer) {
